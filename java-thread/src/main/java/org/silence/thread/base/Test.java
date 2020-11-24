@@ -1,5 +1,8 @@
 package org.silence.thread.base;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+
 public class Test {
     public static void main(String[] args) {
         /*
@@ -21,6 +24,19 @@ public class Test {
         MyRunnable myRunnable = new MyRunnable();
         Thread runThread = new Thread(myRunnable, "我的runnable线程");
         runThread.start();
+
+        MyCallable myCallable = new MyCallable();
+        FutureTask task = new FutureTask(myCallable);
+        Thread callThread = new Thread(task,"我的callable线程");
+        callThread.start();
+        try {
+            Integer sum = (Integer) task.get();
+            System.out.println("--------------------------------callable计算结果：" + sum);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 
         //主线程循环
         for (int i = 0; i < 50; i++) {
